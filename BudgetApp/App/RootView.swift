@@ -1,8 +1,8 @@
 import SwiftUI
 
-/// The app's tabs. Settings joins in Milestone 5.
+/// The app's tabs.
 struct RootView: View {
-    enum AppTab { case dashboard, history }
+    enum AppTab { case dashboard, history, settings }
 
     @State private var selection = AppTab.dashboard
 
@@ -13,6 +13,9 @@ struct RootView: View {
             }
             Tab("History", systemImage: "list.bullet", value: .history) {
                 HistoryView()
+            }
+            Tab("Settings", systemImage: "gearshape", value: .settings) {
+                SettingsView()
             }
         }
     }
