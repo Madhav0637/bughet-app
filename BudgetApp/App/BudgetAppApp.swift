@@ -1,10 +1,12 @@
+import SwiftData
 import SwiftUI
 
 @main
 struct BudgetAppApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ExpenseListView()
         }
+        .modelContainer(AppDatabase.shared)
     }
 }

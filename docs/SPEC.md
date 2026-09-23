@@ -16,6 +16,7 @@ A minimal personal expense tracker for iPhone whose core advantage is **speed of
 |---|---|
 | Platform | iPhone only, native Swift, minimum iOS 26 |
 | Quick entry | Back Tap → Shortcut → "On what?" → amount → category → silent save |
+| Prompt style | Keep the iOS pop-up over the current screen. iOS draws the text prompt in its standard style (smaller than the number prompt) and offers no font control; a full-screen in-app entry screen was tried and rejected (2026-09-24) |
 | Lock state | Quick entry works only when the iPhone is unlocked (Face ID) |
 | Capture | Manual entry only (no SMS, bank, or receipt capture) |
 | Data | On-device only. No backend, no login, no sync |
@@ -200,9 +201,13 @@ budget-app/
 
 ## 11. Risks to verify in Milestone 1
 
-- The intent asks for its parameters in declaration order (merchant → amount → category)
-- The amount prompt shows a number pad
-- The intent runs without opening the app, and only when the phone is unlocked
-- Back Tap can select the shortcut that contains "Log Expense"
-- Total time from Back Tap to saved is under 5 seconds
+All verified on the iPhone on 2026-09-24:
+
+- ✅ The intent asks for its parameters in declaration order (merchant → amount → category)
+- ✅ The amount prompt shows a number pad
+- ✅ The intent runs without opening the app
+- ✅ Back Tap can select the shortcut that contains "Log Expense"
+- ✅ Total time from Back Tap to saved is about 5 seconds
+
+Still to confirm over time:
 - Free provisioning: after the 7-day expiry, re-running from Xcode keeps existing data (**never delete the app from the phone**)
