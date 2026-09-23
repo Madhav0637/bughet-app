@@ -5,7 +5,7 @@ import SwiftUI
 struct BudgetAppApp: App {
     var body: some Scene {
         WindowGroup {
-            HistoryView()
+            RootView()
         }
         .modelContainer(AppDatabase.shared)
     }

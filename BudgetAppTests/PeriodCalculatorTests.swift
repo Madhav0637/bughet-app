@@ -54,6 +54,16 @@ struct PeriodCalculatorTests {
         #expect(range.upperBound == TestDate.make(2027, 1, 1, 0))
     }
 
+    @Test func periodLabels() {
+        #expect(Period.allCases.map(\.title) == ["Week", "Month", "Year"])
+        #expect(Period.allCases.map(\.phrase) == ["this week", "this month", "this year"])
+    }
+
+    @Test func periodSurvivesBeingSaved() {
+        // The dashboard remembers the chosen period by its raw value.
+        #expect(Period.allCases.map { Period(rawValue: $0.rawValue) } == Period.allCases)
+    }
+
     @Test(arguments: Period.allCases)
     func dateIsInsideItsOwnPeriod(period: Period) {
         let date = TestDate.make(2026, 9, 23, 18, 30)

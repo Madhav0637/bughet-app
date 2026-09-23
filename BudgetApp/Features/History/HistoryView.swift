@@ -8,7 +8,7 @@ struct HistoryView: View {
     @Query(sort: \Category.name) private var categories: [Category]
 
     @State private var filter = HistoryFilter()
-    @State private var editing: Expense?
+    @State private var form: ExpenseFormView.Mode?
     @State private var errorMessage: String?
 
     private var groups: [HistoryFilter.DayGroup] {
@@ -25,7 +25,7 @@ struct HistoryView: View {
                 ForEach(groups) { group in
                     Section(HistoryFilter.title(forDay: group.day)) {
                         ForEach(group.expenses) { expense in
-                            Button { editing = expense } label: {
+                            Button { form = .edit(expense) } label: {
                                 ExpenseRow(expense: expense)
                             }
                             .tint(.primary)
@@ -41,9 +41,14 @@ struct HistoryView: View {
             .overlay { emptyState }
             .navigationTitle("History")
             .searchable(text: $filter.searchText, prompt: "Search merchants")
-            .toolbar { categoryMenu }
-            .sheet(item: $editing) { expense in
-                EditExpenseView(expense: expense)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) { categoryMenu }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Add Expense", systemImage: "plus") { form = .add }
+                }
+            }
+            .sheet(item: $form) { mode in
+                ExpenseFormView(mode: mode)
             }
             .alert("Couldn't delete", isPresented: .constant(errorMessage != nil)) {
                 Button("OK") { errorMessage = nil }
@@ -93,27 +98,6 @@ struct HistoryView: View {
         } catch {
             errorMessage = error.localizedDescription
         }
-    }
-}
-
-private struct ExpenseRow: View {
-    let expense: Expense
-
-    var body: some View {
-        HStack(spacing: 12) {
-            Text(expense.category?.emoji ?? "❔")
-                .font(.title2)
-            VStack(alignment: .leading) {
-                Text(expense.merchant)
-                Text(expense.date, format: .dateTime.hour().minute())
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            Spacer()
-            Text(expense.amount.inr)
-                .monospacedDigit()
-        }
-        .contentShape(.rect)
     }
 }
 
