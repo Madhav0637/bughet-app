@@ -9,3 +9,9 @@ xcuserdata/
 build/
 DerivedData/
 *.noindex/
+
+# Screen recordings (only the trimmed GIF goes in the repo)
+*.mp4
+*.MP4
+*.mov
+*.MOV

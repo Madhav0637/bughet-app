@@ -1,6 +1,6 @@
 # BudgetApp — MVP Specification
 
-> Working name. Status: **finalized for MVP** (2026-09-23).
+> Working name. Status: **MVP built** (all milestones complete, 2026-09-24). Spec finalized 2026-09-23.
 
 ## 1. Overview
 
@@ -42,7 +42,7 @@ A minimal personal expense tracker for iPhone whose core advantage is **speed of
 - Dashboard: period switcher, total, category breakdown, 5 most recent expenses
 - History: search, category filter, edit, swipe to delete
 - Category management: add, edit, delete (blocked while in use), move all expenses to another category
-- CSV export through the share sheet
+- Export as a CSV spreadsheet or a PDF report, shared as a real file
 - Back Tap setup guide in Settings
 - Dark mode (follows the system setting)
 
@@ -72,7 +72,7 @@ SwiftUI screens (Dashboard, History) ── queries ─┘
 
 - **Reads:** screens read through SwiftData queries, which refresh automatically when data changes.
 - **Writes:** every change goes through a service, so the Shortcut and the app apply the same validation.
-- **Calculations** (period ranges, totals, CSV) are plain functions with no UI or database code, so they can be unit-tested on their own.
+- **Calculations** (period ranges, totals, filtering, CSV and PDF) are plain functions with no UI or database code, so they can be unit-tested on their own.
 - **No per-screen view models.** SwiftData queries are designed to live in views, and a view-model layer would add code without adding value at this size.
 - **The intent lives in the main app target** (no separate extension). It shares the app's database and needs no paid-account capabilities.
 - **Expected volume:** about 10 entries a day, roughly 3,650 a year. Aggregating a year of data in memory is fine at this scale.
@@ -126,7 +126,10 @@ There is no server, so there is no REST API. The app exposes one system-facing a
 | CategoryService | Create defaults on first launch; add and edit categories; move all expenses from one category to another; delete (fails with "Used by N expenses" when not empty, or when it is the last category); return categories in usage order |
 | PeriodCalculator | Return the date range of the current week (Monday start), month (1st), or year, in the device time zone |
 | SpendingSummary | For a period: total, per-category amounts (highest first), and the 5 most recent expenses |
-| CSVExporter | Export all expenses as CSV with columns `Date` (`yyyy-MM-dd HH:mm`), `Merchant`, `Category`, `Amount` (plain integer) |
+| CSVExporter | Export all expenses as CSV with columns `Date` (`yyyy-MM-dd HH:mm`), `Merchant`, `Category`, `Amount` (plain integer). Escapes commas, quotes and line breaks; prefixes text starting with = + - @ with an apostrophe |
+| PDFReport | A4 report: title, date range, total, spending by category with percentages, and a paginated table of every expense |
+| ExportWriter | Writes a CSV or PDF to a dated file (`BudgetApp-expenses-yyyy-MM-dd.csv` / `.pdf`) so the share sheet keeps the extension |
+| HistoryFilter | Merchant search (ignores case and accents), category filter, grouping by day, day titles |
 
 ### Formatting
 Amounts are shown as `₹` with Indian digit grouping and no decimals, e.g. `₹1,23,456`.
@@ -156,7 +159,7 @@ Amounts are shown as `₹` with Indian digit grouping and no decimals, e.g. `₹
 
 ### Tab 3: Settings
 - **Categories:** list in usage order, showing each category's expense count. Tap a category to edit its name and emoji, or use "Move all expenses to…". Delete is blocked while the category is in use and points to the move action.
-- **Export CSV:** opens the share sheet
+- **Export Data:** choose Spreadsheet (CSV) or Report (PDF); the file opens in the share sheet
 - **Set up Back Tap:** step-by-step guide:
   1. In the Shortcuts app, create a shortcut containing the "Log Expense" action
   2. Go to Settings → Accessibility → Touch → Back Tap → Double Tap and pick that shortcut
@@ -174,7 +177,7 @@ budget-app/
 │   ├── App/           # App entry point, ModelContainer setup
 │   ├── Models/        # Expense, Category
 │   ├── Services/      # ExpenseService, CategoryService, PeriodCalculator,
-│   │                  # SpendingSummary, CSVExporter
+│   │                  # SpendingSummary, HistoryFilter, CSVExporter, PDFReport, ExportWriter
 │   ├── Intents/       # LogExpenseIntent, CategoryEntity + query
 │   ├── Features/
 │   │   ├── Dashboard/
@@ -183,21 +186,22 @@ budget-app/
 │   │   └── Settings/  # Categories, Export, Back Tap guide
 │   └── Shared/        # INR formatting, reusable views
 ├── BudgetAppTests/    # Service and calculation tests
-└── docs/              # SPEC.md, screenshots
+├── docs/              # SPEC.md, screenshots
+└── tools/             # make-app-icon.swift
 ```
 
 ## 10. Build plan
 
-| # | Milestone | Done when |
-|---|---|---|
-| 0 | Setup | Xcode project created; a blank app runs on the iPhone with free signing |
-| 1 | **Back Tap prototype** | Back Tap logs an expense on the iPhone without opening the app, and it appears in a plain list (see §11) |
-| 2 | Data layer and tests | Models, services, validation, default categories, PeriodCalculator, SpendingSummary, all unit-tested |
-| 3 | In-app entry and History | Add/Edit screens, search, category filter, delete |
-| 4 | Dashboard | Period switcher, total, category breakdown, recent list |
-| 5 | Category management | Add, edit, move-all, delete rules; the intent's category list reflects changes and usage order |
-| 6 | Export and polish | CSV export, empty states, Back Tap guide, dark mode check, app icon |
-| 7 | Showcase | README with architecture diagram, screenshots, Back Tap demo GIF |
+| # | Milestone | Done when | Status |
+|---|---|---|---|
+| 0 | Setup | Xcode project created; a blank app runs on the iPhone with free signing | ✅ |
+| 1 | **Back Tap prototype** | Back Tap logs an expense on the iPhone without opening the app, and it appears in a plain list (see §11) | ✅ |
+| 2 | Data layer and tests | Models, services, validation, default categories, PeriodCalculator, SpendingSummary, all unit-tested | ✅ |
+| 3 | In-app entry and History | Add/Edit screens, search, category filter, delete | ✅ |
+| 4 | Dashboard | Period switcher, total, category breakdown, recent list | ✅ |
+| 5 | Category management | Add, edit, move-all, delete rules; the intent's category list reflects changes and usage order | ✅ |
+| 6 | Export and polish | CSV and PDF export, empty states, Back Tap guide, dark mode check, app icon | ✅ |
+| 7 | Showcase | README with architecture diagram, screenshots, Back Tap demo GIF | ✅ (demo GIF to add once recorded on the iPhone) |
 
 ## 11. Risks to verify in Milestone 1
 
