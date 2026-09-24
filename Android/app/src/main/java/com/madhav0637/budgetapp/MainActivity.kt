@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.madhav0637.budgetapp.ui.history.HistoryScreen
+import com.madhav0637.budgetapp.ui.RootScreen
 import com.madhav0637.budgetapp.ui.theme.BudgetAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -13,7 +13,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             BudgetAppTheme {
-                HistoryScreen()
+                RootScreen()
             }
         }
     }
