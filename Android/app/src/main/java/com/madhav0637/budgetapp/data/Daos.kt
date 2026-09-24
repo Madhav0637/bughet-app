@@ -1,15 +1,39 @@
 package com.madhav0637.budgetapp.data
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CategoryDao {
     @Insert
+    suspend fun insert(category: Category)
+
+    @Insert
     suspend fun insertAll(categories: List<Category>)
+
+    @Update
+    suspend fun update(category: Category)
+
+    @Delete
+    suspend fun delete(category: Category)
+
+    @Query("SELECT * FROM categories")
+    suspend fun getAll(): List<Category>
+
+    @Query("SELECT COUNT(*) FROM categories")
+    suspend fun count(): Int
+
+    @Query("SELECT COUNT(*) FROM expenses WHERE categoryId = :categoryId")
+    suspend fun expenseCount(categoryId: String): Int
+
+    /** Moves every expense from one category to another in a single statement. */
+    @Query("UPDATE expenses SET categoryId = :toId WHERE categoryId = :fromId")
+    suspend fun moveExpenses(fromId: String, toId: String)
 
     /** Most-used first; ties sorted alphabetically, ignoring case. */
     @Query(
@@ -27,6 +51,12 @@ interface CategoryDao {
 interface ExpenseDao {
     @Insert
     suspend fun insert(expense: Expense)
+
+    @Update
+    suspend fun update(expense: Expense)
+
+    @Delete
+    suspend fun delete(expense: Expense)
 
     /** Newest first. The returned Flow emits again whenever the data changes. */
     @Transaction

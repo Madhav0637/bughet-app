@@ -33,6 +33,12 @@ abstract class AppDatabase : RoomDatabase() {
             Room.databaseBuilder(context, AppDatabase::class.java, "budget.db")
                 .addCallback(SeedDefaults)
                 .build()
+
+        /** A throwaway database in memory, for tests. Seeding the defaults is optional. */
+        fun inMemory(context: Context, seedDefaults: Boolean = false): AppDatabase =
+            Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java)
+                .apply { if (seedDefaults) addCallback(SeedDefaults) }
+                .build()
     }
 
     /**
