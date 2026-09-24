@@ -34,6 +34,9 @@ class ExpenseService(private val dao: ExpenseDao) {
 
     suspend fun delete(expense: Expense) = dao.delete(expense)
 
+    /** Puts back an expense that was just deleted, for Undo. */
+    suspend fun restore(expense: Expense) = dao.insert(expense)
+
     /** The database keeps milliseconds; rounding first means the returned expense matches what was stored. */
     private fun Instant.toStoredPrecision(): Instant = truncatedTo(ChronoUnit.MILLIS)
 }

@@ -90,6 +90,17 @@ class ServicesTest {
         assertEquals(saved, allExpenses().single().expense)
     }
 
+    @Test
+    fun restoreBringsBackTheSameExpenseAfterDelete() = runBlocking {
+        val food = categories.add("Food", "🍔")
+        val saved = expenses.add("Pepsi", 40, food.id, Instant.ofEpochSecond(1_000))
+        expenses.delete(saved)
+        assertTrue(allExpenses().isEmpty())
+
+        expenses.restore(saved)
+        assertEquals(saved, allExpenses().single().expense) // same id, merchant, amount and time
+    }
+
     // MARK: Category order
 
     @Test
