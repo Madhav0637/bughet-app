@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Long-press the BudgetApp icon → "Log Expense". Can be dragged onto the home screen as its own icon. -->
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_log_expense"
+        android:shortcutId="log_expense"
+        android:shortcutLongLabel="@string/log_expense_long"
+        android:shortcutShortLabel="@string/log_expense">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.madhav0637.budgetapp.ui.quickentry.QuickEntryActivity"
+            android:targetPackage="com.madhav0637.budgetapp" />
+    </shortcut>
+</shortcuts>
