@@ -15,3 +15,11 @@ DerivedData/
 *.MP4
 *.mov
 *.MOV
+
+# Release signing: the key and its passwords must never be committed
+keystore.properties
+*.jks
+*.keystore
+
+# Finished APKs for sharing
+dist/
