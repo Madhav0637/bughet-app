@@ -135,6 +135,14 @@ class CategoryRulesTest {
     }
 
     @Test
+    fun emojiBoxKeepsOnlyTheLastCharacter() {
+        assertEquals("🍕", CategoryRules.lastCharacter("🍔🍕"))
+        assertEquals("🧑🏽‍🍳", CategoryRules.lastCharacter("🍔🧑🏽‍🍳")) // a multi-part emoji stays whole
+        assertEquals("🇮🇳", CategoryRules.lastCharacter("a🇮🇳"))
+        assertEquals("", CategoryRules.lastCharacter(""))
+    }
+
+    @Test
     fun inUseMessageUsesTheRightWord() {
         assertTrue(CategoryError.InUse(1).message!!.startsWith("Used by 1 expense."))
         assertTrue(CategoryError.InUse(3).message!!.startsWith("Used by 3 expenses."))

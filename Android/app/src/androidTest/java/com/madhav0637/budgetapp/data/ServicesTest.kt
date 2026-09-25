@@ -120,6 +120,18 @@ class ServicesTest {
         )
     }
 
+    @Test
+    fun categoriesComeWithTheirExpenseCounts() = runBlocking {
+        val food = categories.add("Food", "🍔")
+        val bills = categories.add("Bills", "🧾")
+        categories.add("Health", "💊")
+        repeat(3) { expenses.add("Lunch", 10, food.id) }
+        expenses.add("Rent", 10, bills.id)
+
+        val counts = db.categoryDao().observeByUsageWithCounts().first()
+        assertEquals(listOf("Food" to 3, "Bills" to 1, "Health" to 0), counts.map { it.category.name to it.expenseCount })
+    }
+
     // MARK: Category management
 
     @Test

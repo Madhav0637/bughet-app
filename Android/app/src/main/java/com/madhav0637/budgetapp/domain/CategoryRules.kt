@@ -41,6 +41,18 @@ object CategoryRules {
         }
     }
 
+    /**
+     * Keeps only the last user-visible character, so typing a new emoji in the emoji box replaces the old one
+     * (and a multi-part emoji like 🧑🏽‍🍳 is kept whole).
+     */
+    fun lastCharacter(text: String): String {
+        if (text.isEmpty()) return text
+        val iterator = BreakIterator.getCharacterInstance()
+        iterator.setText(text)
+        val end = iterator.last()
+        return text.substring(iterator.previous(), end)
+    }
+
     /** Counts user-visible characters, so an emoji made of several code points counts once. */
     private fun graphemeCount(text: String): Int {
         val iterator = BreakIterator.getCharacterInstance()

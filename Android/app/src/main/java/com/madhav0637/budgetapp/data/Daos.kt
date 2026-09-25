@@ -45,6 +45,17 @@ interface CategoryDao {
         """,
     )
     fun observeByUsage(): Flow<List<Category>>
+
+    /** Same order as [observeByUsage], with each category's expense count. */
+    @Query(
+        """
+        SELECT categories.*, COUNT(expenses.id) AS expenseCount FROM categories
+        LEFT JOIN expenses ON expenses.categoryId = categories.id
+        GROUP BY categories.id
+        ORDER BY COUNT(expenses.id) DESC, categories.name COLLATE NOCASE ASC
+        """,
+    )
+    fun observeByUsageWithCounts(): Flow<List<CategoryWithCount>>
 }
 
 @Dao

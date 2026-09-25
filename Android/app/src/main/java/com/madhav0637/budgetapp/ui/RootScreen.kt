@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -22,13 +23,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.madhav0637.budgetapp.ui.dashboard.DashboardScreen
 import com.madhav0637.budgetapp.ui.history.HistoryScreen
+import com.madhav0637.budgetapp.ui.settings.SettingsTab
 
 private enum class Tab(val label: String, val icon: ImageVector) {
     Dashboard("Dashboard", Icons.Filled.Home),
     History("History", Icons.AutoMirrored.Filled.List),
+    Settings("Settings", Icons.Filled.Settings),
 }
 
-/** The app's tabs. Settings joins in milestone A5. */
+/** The app's tabs. */
 @Composable
 fun RootScreen() {
     var tab by rememberSaveable { mutableStateOf(Tab.Dashboard) }
@@ -54,6 +57,7 @@ fun RootScreen() {
             when (tab) {
                 Tab.Dashboard -> DashboardScreen(onSeeAll = { tab = Tab.History })
                 Tab.History -> HistoryScreen()
+                Tab.Settings -> SettingsTab()
             }
         }
     }

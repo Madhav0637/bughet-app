@@ -47,3 +47,9 @@ data class ExpenseWithCategory(
     @Relation(parentColumn = "categoryId", entityColumn = "id")
     val category: Category,
 )
+
+/** A category with how many expenses use it, for the Categories screen. */
+data class CategoryWithCount(
+    @Embedded val category: Category,
+    val expenseCount: Int,
+)
