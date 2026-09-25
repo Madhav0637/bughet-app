@@ -1,5 +1,0 @@
-<resources>
-    <string name="app_name">BudgetApp</string>
-    <string name="log_expense">Log Expense</string>
-    <string name="log_expense_long">Log an expense</string>
-</resources>
