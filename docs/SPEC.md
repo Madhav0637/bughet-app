@@ -218,7 +218,7 @@ Still to confirm over time:
 
 ## 12. Android version
 
-> Status: **decisions agreed, project set up** (2026-09-25). Lives in the `Android/` folder of this repo; the iOS app is unchanged.
+> Status: **built** (all milestones complete, 2026-09-25). Lives in the `Android/` folder of this repo; the iOS app is unchanged.
 
 ### Decision log
 
@@ -244,3 +244,19 @@ No hardware gesture exists on every Android phone, and apps can't listen to the 
 The "Log Expense" entry is a second launcher icon that opens straight into the pop-up. It exists because brand gesture settings can open an app but not a specific screen. The cost is a second icon in the app drawer, which was accepted.
 
 **The pop-up** is the app's own translucent window drawn over whatever app is on screen, not a full-screen app. It has the same three steps as iOS (On what? → Amount → Category), and **both text steps use the same big, bold style**, which iOS's system prompts could not offer.
+
+### Build plan
+
+| # | Milestone | Status |
+|---|---|---|
+| A0 | Android Studio project, runs in the emulator | ✅ |
+| A1 | Quick-entry pop-up, Room database, tile, launcher shortcut, "Log Expense" entry | ✅ |
+| A2 | Rules and calculations ported from iOS, with JVM and on-device tests | ✅ |
+| A3 | History: search, category chips, day headings, swipe to delete with Undo, edit sheet | ✅ |
+| A4 | Dashboard and bottom tab bar | ✅ |
+| A5 | Settings tab and category management | ✅ |
+| A6 | CSV/PDF export, quick-entry setup guide, green ₹ icon | ✅ |
+| A7 | README covering both apps | ✅ |
+
+**Tests:** 46 JVM tests for the domain layer and 18 on-device tests against an in-memory Room database.
+
