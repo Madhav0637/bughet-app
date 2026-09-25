@@ -22,13 +22,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 /**
- * The Settings tab. It has its own small back stack: Settings → Categories → one category.
- * CSV/PDF export and the quick-entry guide join in milestone A6.
+ * The Settings tab. It has its own small back stack: Settings → Categories → one category,
+ * plus the quick-entry guide and Export Data.
  */
 @Composable
 fun SettingsTab() {
@@ -37,11 +38,17 @@ fun SettingsTab() {
     val categoriesViewModel: CategoriesViewModel = viewModel(factory = CategoriesViewModel.Factory)
 
     BackHandler(enabled = screen != SETTINGS) {
-        screen = if (screen == CATEGORIES) SETTINGS else CATEGORIES
+        screen = if (screen in listOf(CATEGORIES, GUIDE, EXPORT)) SETTINGS else CATEGORIES
     }
 
     when (screen) {
-        SETTINGS -> SettingsScreen(onCategories = { screen = CATEGORIES })
+        SETTINGS -> SettingsScreen(
+            onCategories = { screen = CATEGORIES },
+            onGuide = { screen = GUIDE },
+            onExport = { screen = EXPORT },
+        )
+        GUIDE -> QuickEntryGuideScreen(onBack = { screen = SETTINGS })
+        EXPORT -> ExportScreen(onBack = { screen = SETTINGS })
         CATEGORIES -> CategoriesScreen(
             viewModel = categoriesViewModel,
             onBack = { screen = SETTINGS },
@@ -57,23 +64,31 @@ fun SettingsTab() {
 
 private const val SETTINGS = "settings"
 private const val CATEGORIES = "categories"
+private const val GUIDE = "guide"
+private const val EXPORT = "export"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SettingsScreen(onCategories: () -> Unit) {
+private fun SettingsScreen(onCategories: () -> Unit, onGuide: () -> Unit, onExport: () -> Unit) {
     Scaffold(topBar = { TopAppBar(title = { Text("Settings") }) }) { padding ->
         Column(Modifier.padding(padding)) {
             SettingsRow(emoji = "🏷️", title = "Categories", detail = "Add, rename, move or delete categories", onClick = onCategories)
+            SettingsRow(emoji = "⚡", title = "Set Up Quick Entry", detail = "Tile, home-screen icon, or your phone's gesture", onClick = onGuide)
+            SettingsRow(emoji = "📤", title = "Export Data", detail = "Save your expenses as a CSV spreadsheet or a PDF report", onClick = onExport)
         }
     }
 }
 
 @Composable
-internal fun SettingsRow(emoji: String, title: String, detail: String, onClick: () -> Unit) {
+internal fun SettingsRow(emoji: String, title: String, detail: String, enabled: Boolean = true, onClick: () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(enabled = enabled, onClick = onClick)
+            .alpha(if (enabled) 1f else 0.4f)
+            .padding(horizontal = 16.dp, vertical = 16.dp),
     ) {
         Text(emoji, fontSize = 24.sp)
         Column(Modifier.weight(1f)) {
