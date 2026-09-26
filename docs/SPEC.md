@@ -2,7 +2,8 @@
 
 > Status: **2.0 redesign built** (2026-09-26): renamed Koku, new minimalist design with Light/Dark/System themes and
 > highlight colours, monthly budget with alerts, Insights tab, faster Add screen. The MVP (1.0) was completed on
-> 2026-09-24; its spec was finalized 2026-09-23. The Android app keeps the 1.0 design for now.
+> 2026-09-24; its spec was finalized 2026-09-23. The Android app is getting the same 2.0 redesign and features
+> (see section 12).
 
 ## 1. Overview
 
@@ -262,7 +263,8 @@ Still to confirm over time:
 
 ## 12. Android version
 
-The Android app has the same features and rules, and now lives in its own repo:
+The Android app has the same features and rules, including the Koku 2.0 redesign (built on its `koku-redesign`
+branch), and lives in its own repo:
 [budget-app-android](https://github.com/Madhav0637/budget-app-android). Its
 [spec](https://github.com/Madhav0637/budget-app-android/blob/main/docs/SPEC.md) covers the Android-specific
 decisions: the Quick Settings tile, launcher shortcut and brand gestures, and the app's own pop-up.

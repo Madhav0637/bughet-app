@@ -15,7 +15,7 @@
 
 <p align="center">
   Also on Android, with a Quick Settings tile, a home-screen shortcut and phone gestures:
-  <a href="https://github.com/Madhav0637/budget-app-android"><b>BudgetApp for Android</b></a>.
+  <a href="https://github.com/Madhav0637/budget-app-android"><b>Koku for Android</b></a>, with the same redesign and features.
 </p>
 
 <p align="center">
