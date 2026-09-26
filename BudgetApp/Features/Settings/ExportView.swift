@@ -22,8 +22,10 @@ struct ExportView: View {
             } footer: {
                 Text(footer)
             }
+            .listRowBackground(Color.surface)
         }
-        .navigationTitle("Export Data")
+        .kokuList()
+        .navigationTitle("Export")
         .navigationBarTitleDisplayMode(.inline)
         .task(id: expenses.count) { writeFiles() }
         .alert("Couldn't create the file", isPresented: .constant(errorMessage != nil)) {
@@ -35,16 +37,22 @@ struct ExportView: View {
 
     @ViewBuilder
     private func exportRow(_ format: ExportFormat, title: String, systemImage: String, detail: String) -> some View {
-        let label = Label {
+        let label = HStack(spacing: 12) {
+            IconTile(systemImage: systemImage)
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
+                    .font(.body.weight(.medium))
+                    .foregroundStyle(Color.ink)
                 Text(detail)
-                    .font(.caption)
-                    .foregroundStyle(Color.secondary) // plain grey, not the button's blue
+                    .font(.footnote)
+                    .foregroundStyle(Color.ink2) // plain grey, not the tint colour
             }
-        } icon: {
-            Image(systemName: systemImage)
+            Spacer(minLength: 8)
+            Image(systemName: "square.and.arrow.up")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(Color.ink3)
         }
+        .padding(.vertical, 2)
 
         if let url = files[format] {
             ShareLink(item: url) { label }

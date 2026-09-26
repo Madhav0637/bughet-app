@@ -24,7 +24,11 @@ struct LogExpenseIntent: AppIntent {
         guard let category = try CategoryService(context: context).category(withID: category.id) else {
             throw ExpenseError.categoryNotFound
         }
-        try ExpenseService(context: context).add(merchant: merchant, amount: amount, category: category)
+        let alert = try BudgetService(context: context).alert {
+            try ExpenseService(context: context).add(merchant: merchant, amount: amount, category: category)
+        }
+        // Still silent unless this expense takes the month past 80% or 100% of the budget.
+        if let alert { await BudgetNotifier.post(alert) }
         return .result()
     }
 }

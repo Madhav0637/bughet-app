@@ -68,6 +68,7 @@ struct HistoryFilterTests {
             TestDate.make(2026, 9, 21, 0),
         ])
         #expect(groups.last?.expenses.map(\.merchant) == ["Swiggy", "Uber"])
+        #expect(groups.map(\.total) == [400, 90, 430])
     }
 
     @Test func dayTitles() {

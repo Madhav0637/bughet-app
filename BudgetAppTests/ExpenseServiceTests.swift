@@ -59,7 +59,7 @@ struct ExpenseServiceTests {
         let newDate = TestDate.make(2026, 9, 20, 9)
 
         try ExpenseService(context: db.context).update(
-            expense, merchant: "  Uber ", amount: 180, category: transport, date: newDate
+            expense, merchant: "  Uber ", amount: 180, category: transport, date: newDate, note: nil
         )
 
         #expect(expense.merchant == "Uber")
@@ -77,10 +77,10 @@ struct ExpenseServiceTests {
         let service = ExpenseService(context: db.context)
 
         #expect(throws: ExpenseError.nonPositiveAmount) {
-            try service.update(expense, merchant: "Uber", amount: 0, category: transport, date: .now)
+            try service.update(expense, merchant: "Uber", amount: 0, category: transport, date: .now, note: nil)
         }
         #expect(throws: ExpenseError.emptyMerchant) {
-            try service.update(expense, merchant: " ", amount: 100, category: transport, date: .now)
+            try service.update(expense, merchant: " ", amount: 100, category: transport, date: .now, note: nil)
         }
         #expect(expense.merchant == "Swiggy")
         #expect(expense.amount == 250)
@@ -97,6 +97,56 @@ struct ExpenseServiceTests {
         let remaining = try db.context.fetch(FetchDescriptor<Expense>())
         #expect(remaining.map(\.merchant) == ["Keep"])
         #expect(food.expenses.map(\.merchant) == [keep.merchant])
+    }
+
+    @Test func savesATrimmedNote() throws {
+        let expense = try ExpenseService(context: db.context).add(merchant: "Zomato", amount: 420, category: food,
+                                                                 note: "  team dinner \n")
+        #expect(expense.note == "team dinner")
+    }
+
+    @Test(arguments: [nil, "", "   "])
+    func blankNoteIsStoredAsNil(note: String?) throws {
+        let expense = try ExpenseService(context: db.context).add(merchant: "Zomato", amount: 420, category: food, note: note)
+        #expect(expense.note == nil)
+    }
+
+    @Test func updateCanChangeAndRemoveTheNote() throws {
+        let service = ExpenseService(context: db.context)
+        let expense = try service.add(merchant: "Zomato", amount: 420, category: food, note: "lunch")
+
+        try service.update(expense, merchant: "Zomato", amount: 420, category: food, date: expense.date, note: "dinner")
+        #expect(expense.note == "dinner")
+        try service.update(expense, merchant: "Zomato", amount: 420, category: food, date: expense.date, note: " ")
+        #expect(expense.note == nil)
+    }
+
+    @Test func restorePutsADeletedExpenseBackExactly() throws {
+        let service = ExpenseService(context: db.context)
+        let date = TestDate.make(2026, 9, 21, 20, 15)
+        let expense = try service.add(merchant: "Swiggy", amount: 310, category: food, date: date, note: "late night")
+        let snapshot = ExpenseSnapshot(expense)
+        try service.delete(expense)
+
+        let restored = try service.restore(snapshot)
+
+        #expect(restored.id == snapshot.id)
+        #expect(restored.merchant == "Swiggy")
+        #expect(restored.amount == 310)
+        #expect(restored.date == date)
+        #expect(restored.note == "late night")
+        #expect(restored.category === food)
+        #expect(try db.context.fetchCount(FetchDescriptor<Expense>()) == 1)
+    }
+
+    @Test func restoreFailsWhenTheCategoryIsGone() throws {
+        let service = ExpenseService(context: db.context)
+        let spare = try db.makeCategory("Spare")
+        let snapshot = ExpenseSnapshot(try service.add(merchant: "Shop", amount: 50, category: spare))
+        try service.delete(try #require(spare.expenses.first))
+        try CategoryService(context: db.context).delete(spare)
+
+        #expect(throws: ExpenseError.categoryNotFound) { try service.restore(snapshot) }
     }
 
     @Test func errorMessagesAreReadable() {

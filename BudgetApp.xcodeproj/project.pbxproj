@@ -14,11 +14,19 @@
 			remoteGlobalIDString = 000000000000000100000000;
 			remoteInfo = BudgetApp;
 		};
+		000000000000000350000000 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 000000000000000000000000 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 000000000000000100000000;
+			remoteInfo = BudgetApp;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		000000000000000000000120 /* BudgetApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BudgetApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		000000000000000000000220 /* BudgetAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BudgetAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		000000000000000000000320 /* BudgetAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BudgetAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -30,6 +38,11 @@
 		000000000000000000000210 /* BudgetAppTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = BudgetAppTests;
+			sourceTree = "<group>";
+		};
+		000000000000000000000310 /* BudgetAppUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BudgetAppUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -45,6 +58,11 @@
 			files = (
 			);
 		};
+		000000000000000330000000 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -53,6 +71,7 @@
 			children = (
 				000000000000000000000010 /* BudgetApp */,
 				000000000000000000000210 /* BudgetAppTests */,
+				000000000000000000000310 /* BudgetAppUITests */,
 				000000000000000000000020 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -62,6 +81,7 @@
 			children = (
 				000000000000000000000120 /* BudgetApp.app */,
 				000000000000000000000220 /* BudgetAppTests.xctest */,
+				000000000000000000000320 /* BudgetAppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -108,6 +128,27 @@
 			productReference = 000000000000000000000220 /* BudgetAppTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		000000000000000300000000 /* BudgetAppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 000000000000000310000000 /* Build configuration list for PBXNativeTarget "BudgetAppUITests" */;
+			buildPhases = (
+				000000000000000320000000 /* Sources */,
+				000000000000000330000000 /* Frameworks */,
+				000000000000000340000000 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				000000000000000360000000 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				000000000000000000000310 /* BudgetAppUITests */,
+			);
+			name = BudgetAppUITests;
+			productName = BudgetAppUITests;
+			productReference = 000000000000000000000320 /* BudgetAppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -123,6 +164,10 @@
 					};
 					000000000000000200000000 = {
 						CreatedOnToolsVersion = 26.3;
+						TestTargetID = 000000000000000100000000;
+					};
+					000000000000000300000000 = {
+						CreatedOnToolsVersion = 27.0;
 						TestTargetID = 000000000000000100000000;
 					};
 				};
@@ -143,6 +188,7 @@
 			targets = (
 				000000000000000100000000 /* BudgetApp */,
 				000000000000000200000000 /* BudgetAppTests */,
+				000000000000000300000000 /* BudgetAppUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -154,6 +200,11 @@
 			);
 		};
 		000000000000000240000000 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		000000000000000340000000 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
 			);
@@ -171,6 +222,11 @@
 			files = (
 			);
 		};
+		000000000000000320000000 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -178,6 +234,11 @@
 			isa = PBXTargetDependency;
 			target = 000000000000000100000000 /* BudgetApp */;
 			targetProxy = 000000000000000250000000 /* PBXContainerItemProxy */;
+		};
+		000000000000000360000000 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 000000000000000100000000 /* BudgetApp */;
+			targetProxy = 000000000000000350000000 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -315,7 +376,7 @@
 				DEVELOPMENT_TEAM = 6PRJ3UVUKQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = BudgetApp;
+				INFOPLIST_KEY_CFBundleDisplayName = Koku;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -325,7 +386,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.madhav0637.budgetapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -352,7 +413,7 @@
 				DEVELOPMENT_TEAM = 6PRJ3UVUKQ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = BudgetApp;
+				INFOPLIST_KEY_CFBundleDisplayName = Koku;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -362,7 +423,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.madhav0637.budgetapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -387,7 +448,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6PRJ3UVUKQ;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.madhav0637.budgetappTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -409,7 +470,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6PRJ3UVUKQ;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.madhav0637.budgetappTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -420,6 +481,42 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BudgetApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BudgetApp";
+			};
+			name = Release;
+		};
+		000000000000000311000000 /* Debug configuration for PBXNativeTarget "BudgetAppUITests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6PRJ3UVUKQ;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.madhav0637.budgetappUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = BudgetApp;
+			};
+			name = Debug;
+		};
+		000000000000000312000000 /* Release configuration for PBXNativeTarget "BudgetAppUITests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6PRJ3UVUKQ;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.madhav0637.budgetappUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = BudgetApp;
 			};
 			name = Release;
 		};
@@ -447,6 +544,14 @@
 			buildConfigurations = (
 				000000000000000211000000 /* Debug configuration for PBXNativeTarget "BudgetAppTests" */,
 				000000000000000212000000 /* Release configuration for PBXNativeTarget "BudgetAppTests" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		000000000000000310000000 /* Build configuration list for PBXNativeTarget "BudgetAppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				000000000000000311000000 /* Debug configuration for PBXNativeTarget "BudgetAppUITests" */,
+				000000000000000312000000 /* Release configuration for PBXNativeTarget "BudgetAppUITests" */,
 			);
 			defaultConfigurationName = Release;
 		};

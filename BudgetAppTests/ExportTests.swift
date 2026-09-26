@@ -36,14 +36,14 @@ struct ExportTests {
     @Test(arguments: ExportFormat.allCases)
     func fileNameHasTheDateAndTheRightExtension(format: ExportFormat) {
         let name = ExportWriter.fileName(for: format, on: TestDate.make(2026, 9, 4, 23, 30), timeZone: ist)
-        #expect(name == "BudgetApp-expenses-2026-09-04.\(format.rawValue)")
+        #expect(name == "Koku-expenses-2026-09-04.\(format.rawValue)")
     }
 
     @Test func writesARealCSVFile() throws {
         let url = try ExportWriter.write(.csv, expenses: expenses, to: directory, now: TestDate.make(2026, 9, 24), timeZone: ist)
         #expect(url.pathExtension == "csv")
         let text = try String(contentsOf: url, encoding: .utf8)
-        #expect(text.hasPrefix("Date,Merchant,Category,Amount\n"))
+        #expect(text.hasPrefix("Date,Merchant,Category,Amount,Note\n"))
         #expect(text.contains("2026-09-05 09:00,Electricity bill,Bills,1850"))
     }
 

@@ -7,6 +7,8 @@ struct HistoryFilter {
         let expenses: [Expense]
 
         var id: Date { day }
+        /// What was spent that day.
+        var total: Int { expenses.reduce(0) { $0 + $1.amount } }
     }
 
     var searchText = ""

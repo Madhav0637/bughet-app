@@ -9,13 +9,13 @@ enum ExportFormat: String, CaseIterable, Identifiable {
 
 /// Writes export files to disk, so the share sheet sends a real file with the right name and extension.
 enum ExportWriter {
-    /// A file name like `BudgetApp-expenses-2026-09-24.pdf`.
+    /// A file name like `Koku-expenses-2026-09-24.pdf`.
     static func fileName(for format: ExportFormat, on date: Date = .now, timeZone: TimeZone = .current) -> String {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = timeZone
         let parts = calendar.dateComponents([.year, .month, .day], from: date)
         let day = String(format: "%04d-%02d-%02d", parts.year ?? 0, parts.month ?? 0, parts.day ?? 0)
-        return "BudgetApp-expenses-\(day).\(format.fileExtension)"
+        return "Koku-expenses-\(day).\(format.fileExtension)"
     }
 
     /// Writes the export into `directory` (replacing any older file with the same name) and returns its location.

@@ -21,14 +21,14 @@ struct CSVExporterTests {
     }
 
     @Test func noExpensesGivesJustTheHeader() throws {
-        #expect(try export() == ["Date,Merchant,Category,Amount"])
+        #expect(try export() == ["Date,Merchant,Category,Amount,Note"])
     }
 
     @Test func writesOneRowPerExpense() throws {
         try db.addExpense(1250, to: food, merchant: "Swiggy", on: TestDate.make(2026, 9, 23, 20, 5))
         #expect(try export() == [
-            "Date,Merchant,Category,Amount",
-            "2026-09-23 20:05,Swiggy,Food,1250",
+            "Date,Merchant,Category,Amount,Note",
+            "2026-09-23 20:05,Swiggy,Food,1250,",
         ])
     }
 
@@ -52,12 +52,12 @@ struct CSVExporterTests {
 
     @Test func amountsArePlainNumbers() throws {
         try db.addExpense(123456, to: food, merchant: "Laptop")
-        #expect(try export().last?.hasSuffix(",123456") == true)
+        #expect(try export().last?.hasSuffix(",123456,") == true)
     }
 
     @Test func merchantWithACommaIsQuoted() throws {
         try db.addExpense(90, to: food, merchant: "Chai, Samosa", on: TestDate.make(2026, 9, 23))
-        #expect(try export().last == "2026-09-23 12:00,\"Chai, Samosa\",Food,90")
+        #expect(try export().last == "2026-09-23 12:00,\"Chai, Samosa\",Food,90,")
     }
 
     @Test func quotesInsideAreDoubled() {
@@ -80,6 +80,12 @@ struct CSVExporterTests {
     @Test func categoryNamesAreEscapedToo() throws {
         let odd = try db.makeCategory("Bills, Rent")
         try db.addExpense(15000, to: odd, merchant: "Landlord", on: TestDate.make(2026, 9, 1))
-        #expect(try export().last == "2026-09-01 12:00,Landlord,\"Bills, Rent\",15000")
+        #expect(try export().last == "2026-09-01 12:00,Landlord,\"Bills, Rent\",15000,")
+    }
+
+    @Test func notesGoInTheLastColumnAndAreEscaped() throws {
+        try ExpenseService(context: db.context).add(merchant: "Zomato", amount: 420, category: food,
+                                                   date: TestDate.make(2026, 9, 23, 21), note: "team dinner, office")
+        #expect(try export().last == "2026-09-23 21:00,Zomato,Food,420,\"team dinner, office\"")
     }
 }

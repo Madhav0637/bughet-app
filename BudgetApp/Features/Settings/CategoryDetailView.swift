@@ -50,6 +50,7 @@ struct CategoryDetailView: View {
             Section {
                 CategoryFields(name: $name, emoji: $emoji)
             }
+            .listRowBackground(Color.surface)
 
             if expenseCount > 0 {
                 Section {
@@ -65,6 +66,7 @@ struct CategoryDetailView: View {
                     }
                     .disabled(otherCategories.isEmpty)
                 }
+                .listRowBackground(Color.surface)
             }
 
             Section {
@@ -73,7 +75,9 @@ struct CategoryDetailView: View {
             } footer: {
                 if let deleteBlockedReason { Text(deleteBlockedReason) }
             }
+            .listRowBackground(Color.surface)
         }
+        .kokuList()
         .navigationTitle(category.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

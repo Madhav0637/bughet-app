@@ -13,16 +13,20 @@ struct CategoriesView: View {
                     CategoryDetailView(category: category)
                 } label: {
                     HStack(spacing: 12) {
-                        Text(category.emoji)
-                            .font(.title2)
+                        EmojiTile(emoji: category.emoji, size: 38)
                         Text(category.name)
+                            .font(.body.weight(.medium))
+                            .foregroundStyle(.ink)
                         Spacer()
                         Text(expenseCount(category))
-                            .foregroundStyle(.secondary)
+                            .font(.subheadline)
+                            .foregroundStyle(.ink2)
                     }
                 }
             }
+            .listRowBackground(Color.surface)
         }
+        .kokuList()
         .navigationTitle("Categories")
         .toolbar {
             Button("Add Category", systemImage: "plus") { isAdding = true }

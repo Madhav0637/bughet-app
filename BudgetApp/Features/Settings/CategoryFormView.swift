@@ -43,7 +43,9 @@ struct CategoryFormView: View {
                 } footer: {
                     Text("Tap Emoji, then use the 🙂 key on the keyboard to pick one.")
                 }
+                .listRowBackground(Color.surface)
             }
+            .kokuList()
             .navigationTitle("New Category")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

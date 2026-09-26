@@ -2,9 +2,10 @@ import Foundation
 
 /// Turns expenses into a CSV file that opens cleanly in Excel, Numbers or Google Sheets.
 enum CSVExporter {
-    static let header = "Date,Merchant,Category,Amount"
+    static let header = "Date,Merchant,Category,Amount,Note"
 
-    /// Oldest expense first. Dates are `yyyy-MM-dd HH:mm` in the given time zone; amounts are plain whole rupees.
+    /// Oldest expense first. Dates are `yyyy-MM-dd HH:mm` in the given time zone; amounts are plain whole rupees;
+    /// the note column is empty when there's no note.
     static func csv(for expenses: [Expense], timeZone: TimeZone = .current) -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
@@ -25,6 +26,7 @@ enum CSVExporter {
             escape(expense.merchant),
             escape(expense.category?.name ?? ""),
             String(expense.amount),
+            escape(expense.note ?? ""),
         ]
         return fields.joined(separator: ",")
     }

@@ -19,7 +19,7 @@ enum PDFReport {
 
         let renderer = UIGraphicsPDFRenderer(bounds: page, format: {
             let format = UIGraphicsPDFRendererFormat()
-            format.documentInfo = [kCGPDFContextTitle as String: "BudgetApp Expense Report"]
+            format.documentInfo = [kCGPDFContextTitle as String: "Koku Expense Report"]
             return format
         }())
 

@@ -1,16 +1,16 @@
 <p align="center">
-  <img src="docs/screenshots/app-icon.png" width="96" alt="BudgetApp icon">
+  <img src="docs/screenshots/app-icon.png" width="96" alt="Koku icon">
 </p>
 
-<h1 align="center">BudgetApp for iOS</h1>
+<h1 align="center">Koku for iOS</h1>
 
 <p align="center">
-  A personal expense tracker for iPhone where logging a purchase takes about five seconds:<br>
+  A calm, minimalist expense tracker for iPhone where logging a purchase takes about five seconds:<br>
   <b>double-tap the back of the phone → type what it was → type the amount → pick a category.</b> Done.
 </p>
 
 <p align="center">
-  Swift · SwiftUI · SwiftData · App Intents · Swift Testing · iOS 26 · no third-party dependencies
+  Swift · SwiftUI · SwiftData · Swift Charts · App Intents · Swift Testing · iOS 26 · no third-party dependencies
 </p>
 
 <p align="center">
@@ -19,37 +19,37 @@
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/backtap-demo.gif" width="260" alt="Back Tap demo: double-tap, type Pasta, enter 180, pick Food, saved">
-  <br><sub>Recorded on an iPhone 13: double-tap the back, answer three prompts, saved.</sub>
+  <img src="docs/screenshots/home.png" width="200" alt="Home">
+  <img src="docs/screenshots/add.png" width="200" alt="Add expense">
+  <img src="docs/screenshots/insights.png" width="200" alt="Insights">
+  <img src="docs/screenshots/activity.png" width="200" alt="Activity">
 </p>
-
 <p align="center">
-  <img src="docs/screenshots/dashboard.png" width="200" alt="Dashboard">
-  <img src="docs/screenshots/history.png" width="200" alt="History">
-  <img src="docs/screenshots/categories.png" width="200" alt="Categories">
-  <img src="docs/screenshots/export.png" width="200" alt="Export">
+  <img src="docs/screenshots/home-dark.png" width="200" alt="Home in dark mode">
+  <img src="docs/screenshots/insights-dark.png" width="200" alt="Insights in dark mode">
+  <img src="docs/screenshots/settings-dark.png" width="200" alt="Settings in dark mode">
+  <img src="docs/screenshots/backtap-demo.gif" width="200" alt="Back Tap demo: double-tap, type Pasta, enter 180, pick Food, saved">
 </p>
 
 ## Why
 
 Most expense trackers don't fail because they lack features. They fail because opening an app, finding the add button and filling in a form is just enough friction that people stop logging after a week.
 
-BudgetApp puts entry one gesture away. iPhone's **Back Tap** accessibility feature runs a Shortcut that calls the app's **Log Expense** action. iOS asks three quick questions in a pop-up over whatever you're doing, and the expense is saved without the app ever opening.
+Koku puts entry one gesture away. iPhone's **Back Tap** accessibility feature runs a Shortcut that calls the app's **Log Expense** action. iOS asks three quick questions in a pop-up over whatever you're doing, and the expense is saved without the app ever opening. When you do open the app, it stays quiet: one big number per screen, a neutral canvas, and a single highlight colour for the thing that matters.
 
 ## Features
 
 - **Back Tap quick entry.** "On what?" → amount (number pad) → category. Saved silently, in about five seconds.
-- **Dashboard.** Switch between this week, month or year. See the total, spending by category (highest first) and the latest expenses. The chosen period is remembered.
-- **History.** Every expense, grouped by day ("Today", "Yesterday", "Mon, 21 Sep"). Search by merchant (ignores case and accents), filter by category, swipe to delete, tap to edit.
-- **Categories.** Seven defaults, each with an emoji. Add your own, rename them, and move all of a category's expenses elsewhere. A category can't be deleted while it's in use or if it's the last one. Every list shows the most-used categories first.
-- **Export.** A **CSV** spreadsheet for Excel, Numbers or Google Sheets, or a **PDF** report with totals, a category breakdown and a paginated table of every expense.
+- **Home.** What you've spent this week, month or year, compared with the same point last time ("↓ 12% vs same time last month"), the last 7 days as a mini chart, where the money went and the latest expenses.
+- **Monthly budget.** A progress bar, what's left, and what's safe to spend each day for the rest of the month. A notification when you pass 80% and again at 100%, sent once each per month, including when you log with Back Tap.
+- **Insights.** Week, month or year, now or any time before (tap the arrows or swipe). A day-by-day (or month-by-month) bar chart with the peak highlighted and the average marked; tap a bar for its total. Categories with their share, biggest spend, most visited merchant, average per day, no-spend days 🎉 and top merchants.
+- **A faster Add screen.** Amount first on a custom keypad. Merchants you've used before appear as one-tap suggestions, and choosing one fills in the category you used last time. Optional note, and any date, not just now.
+- **Activity.** Every expense grouped by day with each day's total. Search by merchant (ignores case and accents), filter with category chips, swipe to delete with **Undo**, tap to edit.
+- **Light, Dark or System**, with a smooth cross-fade, and a choice of six highlight colours (mint, lime, sky, periwinkle, coral, amber).
+- **Categories.** Seven defaults, each with an emoji. Add your own, rename them, and move all of a category's expenses elsewhere. Every list shows the most-used categories first.
+- **Export.** A **CSV** spreadsheet (now with notes) for Excel, Numbers or Google Sheets, or a **PDF** report with totals, a category breakdown and every expense.
 - **Private by design.** Everything stays on the iPhone. No account, no server, no network access.
-- **Indian rupees**, with Indian digit grouping (₹1,23,456). Dark mode throughout.
-
-<p align="center">
-  <img src="docs/screenshots/pdf-report.png" width="320" alt="PDF report, first page">
-  <img src="docs/screenshots/guide.png" width="200" alt="Back Tap setup guide">
-</p>
+- **Indian rupees**, with Indian digit grouping (₹1,23,456).
 
 ## How quick entry works
 
@@ -60,10 +60,21 @@ Back Tap (double-tap the back of the iPhone)
                ├─ asks "On what?"      → String
                ├─ asks "Amount (₹)"    → Int, number pad
                ├─ asks "Category"      → list from CategoryQuery, most-used first
-               └─▶ ExpenseService.add(...) → SwiftData store on the device
+               ├─▶ ExpenseService.add(...) → SwiftData store on the device
+               └─▶ BudgetService: crossed 80% or 100% this month? → one notification
 ```
 
-The intent has no default values, so iOS prompts for each parameter in order. It requires an unlocked device and returns no dialog, so the entry saves without interrupting you.
+The intent has no default values, so iOS prompts for each parameter in order. It requires an unlocked device and returns no dialog, so the entry saves without interrupting you. The only exception is the budget notification, sent at most twice a month.
+
+## Design
+
+The redesign was explored in Google Stitch, then built natively in SwiftUI:
+
+- **One hero number per screen.** Totals are large, rounded and roll between values; everything else is quieter.
+- **Neutral canvas, one highlight.** Warm off-white (or near-black) surfaces, graphite text, and one highlight colour used only for the add button, progress, selection and the chart's key bar. Category emoji supply the rest of the colour, so charts stay monochrome.
+- **Motion with a purpose.** Springy buttons, a sliding segmented control, bars that grow in, numbers that roll, a checkmark on save and haptics on every key. Grow-in animations respect Reduce Motion.
+- **iOS 26 native.** The Liquid Glass tab bar minimises on scroll; everything uses system fonts (SF Pro Rounded), Dynamic Type-friendly text styles and VoiceOver labels.
+- **Themes apply to the window**, not just SwiftUI views, so sheets, alerts and the share sheet follow Light / Dark / System too.
 
 ## Architecture
 
@@ -72,12 +83,13 @@ Back Tap → Shortcut → LogExpenseIntent ──┐
                                          ├──→ Services ──→ SwiftData store (on device)
 SwiftUI screens (Add/Edit, Categories) ──┘       ↑
                                                  │ read-only
-SwiftUI screens (Dashboard, History) ── queries ─┘
+SwiftUI screens (Home, Activity, Insights) ─ queries
 ```
 
 - **Every write goes through a service** (`ExpenseService`, `CategoryService`). The Shortcut and the app's screens therefore share one set of rules, for example "amount must be more than ₹0" or "category names are unique regardless of case". An invalid edit changes nothing.
 - **Screens read through SwiftData `@Query`**, so lists refresh by themselves when the Shortcut saves an expense.
-- **Calculations are plain functions** with no UI or database code. `PeriodCalculator` (Monday-start weeks), `SpendingSummary`, `HistoryFilter`, `CSVExporter` and `PDFReport` are all tested directly.
+- **Calculations are plain functions** with no UI or database code: `PeriodCalculator` (Monday-start weeks, earlier periods, "same point last month"), `SpendingSummary`, `PeriodInsights` and `PeriodComparison`, `BudgetPace` and `BudgetAlerts`, `MerchantSuggestions`, `KeypadInput`, `HistoryFilter`, `CSVExporter` and `PDFReport` are all tested directly.
+- **Settings live in `UserDefaults`**, read with `@AppStorage` in screens and directly by the intent, so the budget and its alert record are shared between the app and Back Tap.
 - **No view model per screen.** `@Query` is designed to live in views, and a view-model layer would add code without adding value at this size.
 - **The intent lives in the main app target**, so it shares the app's database and needs no paid developer-account capabilities.
 
@@ -86,18 +98,22 @@ SwiftUI screens (Dashboard, History) ── queries ─┘
 
 ```
 BudgetApp/
-├── App/           # Entry point, tab bar, the shared SwiftData container
+├── App/           # Entry point, tab bar, the shared SwiftData container, demo data (debug builds)
+├── DesignSystem/  # Colours, highlight and theme, cards, chips, pill picker, keypad, toasts, logo
 ├── Models/        # Expense, Category (@Model)
-├── Services/      # ExpenseService, CategoryService, PeriodCalculator, SpendingSummary,
+├── Services/      # ExpenseService, CategoryService, PeriodCalculator, SpendingSummary, PeriodInsights,
+│                  # Budget (pace, alerts, settings keys), BudgetNotifier, MerchantSuggestions,
 │                  # HistoryFilter, CSVExporter, PDFReport, ExportWriter
 ├── Intents/       # LogExpenseIntent, CategoryEntity + CategoryQuery
 ├── Features/
-│   ├── Dashboard/
-│   ├── History/
+│   ├── Home/
+│   ├── Activity/
+│   ├── Insights/
 │   ├── ExpenseForm/   # Add / Edit
-│   └── Settings/      # Categories, Export, Back Tap guide
-└── Shared/        # ₹ formatting, the expense row
+│   └── Settings/      # Budget, Categories, Export, Back Tap guide
+└── Shared/        # ₹ and date formatting, the expense row
 BudgetAppTests/    # Swift Testing suites
+BudgetAppUITests/  # XCUITest flows on sample data
 docs/SPEC.md       # Product spec and decision log
 tools/             # Script that draws the app icon
 ```
@@ -105,24 +121,28 @@ tools/             # Script that draws the app icon
 
 ## Design decisions worth mentioning
 
-- **Kept the iOS pop-up over a custom screen.** iOS draws a text prompt smaller than a number prompt, and apps can't change the fonts of system UI. A full-screen in-app entry screen with matching big text was built and tried, then dropped: a pop-up over whatever is on screen beat switching to a full-screen app. The trade-off is recorded in [`docs/SPEC.md`](docs/SPEC.md).
+- **Kept the iOS pop-up over a custom screen for Back Tap.** iOS draws a text prompt smaller than a number prompt, and apps can't change the fonts of system UI. A full-screen in-app entry screen was tried and dropped: a pop-up over whatever is on screen beat switching to a full-screen app. The in-app Add screen is where the custom keypad lives.
+- **Comparisons are fair.** On 26 September, this month is compared with 1–26 August, not the whole of August.
+- **Budget alerts fire once per level per month**, remembered in `UserDefaults`, so the app and Back Tap never double-notify, and jumping straight past 100% sends one alert, not two.
 - **Money is an `Int` of whole rupees**, not a `Double`, so totals never pick up floating-point rounding errors.
-- **Weeks always start on Monday**, whatever the phone's region setting, and a period includes its first instant but not the next period's first instant. Tests pin down Sunday nights, New Year and leap years.
-- **Exports are written as real files before sharing.** Handing the share sheet plain text made some destinations save a `.csv` as `.txt`.
-- **The CSV escapes commas, quotes and line breaks**, and prefixes text starting with `=`, `+`, `-` or `@` with an apostrophe so spreadsheets don't run it as a formula (CSV injection).
+- **Weeks always start on Monday**, whatever the phone's region setting, and a period includes its first instant but not the next period's first instant.
+- **The note is optional in the database**, so stores from before the redesign open without a migration step (checked by installing the new version over the old one with data in it).
+- **Exports are written as real files before sharing**, and the CSV defuses text starting with `=`, `+`, `-` or `@` so spreadsheets don't run it as a formula.
 
 ## Testing
 
-**80 tests (102 cases with parameterised inputs) across 8 suites**, written with Swift Testing. Each test gets its own in-memory SwiftData container, and dates are built in a fixed time zone so results are the same on any machine.
+**Unit tests** (Swift Testing) cover every service and calculation, each with its own in-memory SwiftData container and dates in a fixed time zone. **UI tests** (XCUITest) drive the real app on sample data: adding an expense via a suggested merchant, a new merchant that needs a category, swipe-to-delete and Undo, deleting from the edit sheet, category filters, browsing Insights, setting a budget, and switching theme and highlight colour.
 
 | Suite | Covers |
 |---|---|
-| ExpenseService | Validation, trimming, add, edit and delete; an invalid edit changes nothing |
+| ExpenseService | Validation, trimming, notes, add, edit, delete and restore |
 | CategoryService · Category management | Default categories, usage order, unique names, emoji validation, move all, delete rules |
-| PeriodCalculator | Monday-start weeks, month and year boundaries, leap years, weeks across New Year |
-| SpendingSummary | Totals, per-category amounts, period boundaries, recent expenses |
-| HistoryFilter | Search (case- and accent-insensitive), category filter, day grouping, day titles |
-| CSVExporter · Export | CSV format and escaping, formula defusing, real `.csv`/`.pdf` files, PDF contents and pagination |
+| PeriodCalculator · PeriodInsights | Monday-start weeks, month/year boundaries, earlier periods, "same point last month", buckets, averages, no-spend days, peaks, merchants |
+| Budget | Pace and per-day allowance, alert levels, once-a-month alerts, messages, the service around a save |
+| MerchantSuggestions · KeypadInput | Recency, case/accent-insensitive matching, category from last use; keypad digits, 00, delete and limits |
+| SpendingSummary · HistoryFilter | Totals, per-category amounts, recent expenses; search, category filter, day groups and totals |
+| CSVExporter · Export | CSV format and escaping, the note column, real `.csv`/`.pdf` files, PDF contents and pagination |
+| KokuUITests | The flows above, end to end |
 
 Run them with **⌘U** in Xcode, or from the command line:
 
@@ -131,7 +151,7 @@ xcodebuild test -project BudgetApp.xcodeproj -scheme BudgetApp \
   -destination 'platform=iOS Simulator,name=iPhone 18 Pro'
 ```
 
-(Swap in the name of any simulator you have installed.)
+Add `-only-testing:BudgetAppTests` to skip the slower UI tests. For screenshots, debug builds accept `-demoData` (sample spending in a throwaway store), `-startTab home|activity|insights|settings`, `-openAdd YES`, `-appearance light|dark` and `-monthlyBudget 25000`.
 
 ## Getting started
 
@@ -140,15 +160,15 @@ xcodebuild test -project BudgetApp.xcodeproj -scheme BudgetApp \
 1. Clone the repo and open `BudgetApp.xcodeproj`.
 2. Under **Signing & Capabilities**, choose your own team and change the bundle identifier to something unique.
 3. Select your iPhone and press **⌘R**.
-4. Set up Back Tap (the app has the same guide under Settings → Set Up Back Tap):
+4. Set up Back Tap (the app has the same guide under Settings → Set up Back Tap):
    1. In **Shortcuts**, create a shortcut with the **Log Expense** action and leave its fields empty.
    2. Go to **Settings → Accessibility → Touch → Back Tap → Double Tap** and choose that shortcut.
 
-With a free Apple ID, the app stops opening after 7 days. Run it from Xcode again to reinstall it; your data is kept as long as you don't delete the app.
+With a free Apple ID, the app stops opening after 7 days. Run it from Xcode again to reinstall it; your data is kept as long as you don't delete the app. Updating from BudgetApp 1.0 keeps all your expenses and your Back Tap shortcut.
 
 ## Not in scope (yet)
 
-Income, budgets, recurring expenses, widgets, iCloud sync (including with the Android app), charts and multiple currencies. These were left out on purpose to keep the first version focused on fast entry. See the spec for the full list.
+Income, per-category budgets, recurring expenses, widgets, iCloud sync (including with the Android app) and multiple currencies. See the spec for the full list.
 
 ---
 
